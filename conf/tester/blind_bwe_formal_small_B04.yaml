@@ -1,0 +1,183 @@
+do_test: True #boolean flag to run inference, False means no testing at all
+
+type: "blind"
+
+name: "tester_blind_bwe" #same as the file name, try to do that for all testers
+
+callable: 'testing.blind_bwe_tester_small.BlindTester'
+sampler_callable: 'testing.blind_bwe_sampler.BlindSampler'
+
+#modes: ['unconditional', 'bwe', 'inpainting'] #modes to test
+#modes: ['unconditional_operator','blind_bwe','unconditional', 'bwe'] #modes to test
+#modes: ['unconditional_operator','filter_bwe'] #modes to test
+#modes: ['unconditional','real_blind_bwe_complete','blind_bwe','real_blind_bwe','bwe'] #modes to test
+#modes: ['unconditional','bwe','blind_bwe','real_blind_bwe'] #modes to test
+modes: ['formal_test_bwe_small'] #modes to test
+#modes: ['blind_bwe'] #modes to test
+#modes: ['real_blind_bwe_complete'] #modes to test
+#modes: ['bwe','blind_bwe'] #modes to test
+#modes: ['unconditional_operator', 'filter_bwe'] #modes to test
+T: 35  #number of discretizatio steprs
+#T: 70 #number of discretizatio steprs
+order: 2 #order of the discretization TODO: implement higher order samplers as the one used in ediffi
+
+filter_out_cqt_DC_Nyq: True
+
+#checkpoint: "testing_training_code-400000.pt"
+checkpoint: "weights-489999.pt"
+
+#checkpoint_operator: "train_filters_diffusion_larger-250000.pt"
+
+unconditional:
+  num_samples: 8
+  audio_len: 184184
+
+posterior_sampling:
+  xi: 0.3 #restoration guidance, 0 means no guidance
+  clipping: False
+  clip_value: 0.5
+  data_consistency: False #always False for blind bwe
+  compensate_transition: True
+  stft_distance:
+    mag: False
+    use: False
+    use_multires: False
+    nfft: 2048
+  norm: 2  #"smoothl1" #1 or 2 or "smoothl1"
+  smoothl1_beta: 1
+  SNR_observations: "None" #adding noise is critical!
+  start_sigma: 0.4
+  freq_weighting: "None"
+  freq_weighting_filter: "sqrt"
+
+#new diffusion parameters (only for sampling):
+diff_params:
+  same_as_training: False
+  sigma_data: 0.063 #default for maestro
+  sigma_min: 1e-4
+  sigma_max: 1
+  P_mean: -1.2 #what is this for?
+  P_std: 1.2 #ehat is this for?
+  ro: 8
+  ro_train: 13
+  Schurn: 10
+  Snoise: 1.000
+  Stmin: 0
+  Stmax: 50
+
+
+autoregressive:
+  overlap: 0.25
+  num_samples: 4
+
+sampler: "stochastic" #wether deterministic or stochastic, unused as Scurn defineds the stochasticity
+
+bandwidth_extension:
+  sigma_observations: 0.00 #adding noise is critical!
+  #start_sigma: "None" #this is the initial noise level, applied to the observations as the first step of the inference, "None" means start from sigma_max
+
+  gain_boost: 0 #db boost to the gain of the audio signal
+
+  test_filter_fit: False #testing fitting for blind bwe experiments
+  compute_sweep: False #also logging stuff for blind bwe experiments
+  decimate:
+    factor: 1
+  filter:
+    type: "firwin" #or "cheby1_fir"
+    fc: 1000 #cutoff frequency of the applied lpf
+    order: 500
+    fir_order: 500
+    beta: 1
+    ripple: 0.05 #for the cheby1
+    resample:
+      fs: 2000
+    biquad:
+      Q: 0.707
+inpainting:
+  gap_length: 1000 #in ms
+  start_gap_idx: None #in ms, None means at the middle
+comp_sens: 
+  percentage: 5 #%
+phase_retrieval:
+  win_size: 1024
+  hop_size: 256
+max_thresh_grads: 1
+type_spec: "linear" #or "mel" for phase retrieval
+declipping:
+  SDR: 3 #in dB
+
+blind_bwe: #this involves generative model of filters
+  #num_slopes: 1
+  #gain_boost: 5 #db boost to the gain of the audio signal
+  #sigma_norm: 0.1
+  #LTAS:               
+  #  sample_rate: 44100
+  #  audio_len: 368368
+  #  path: "/scratch/work/molinee2/datasets/MAESTRO/LTAS_MAESTRO.pt"
+  real_recordings:
+    path: /scratch/work/molinee2/datasets/denoised_recordings/piano
+    num_samples: 4
+  #SNR_observations: 50
+  #sigma_observations: 0.01 #adding noise is critical!
+  SNR_observations: "None" #adding noise is critical!
+  compute_sweep: False #also logging stuff for blind bwe experiments
+  Gain:
+    optimize_G: False
+
+  fcmin: 20 #or a number
+  fcmax: "nyquist" #or a number
+  Amin: -50
+  Amax: 30
+  NFFT: 4096
+  sigma_den_estimate: 0.000 #this is the noise level of the observations, used for regularization
+  test_filter:
+    fc: [1000]
+    A: [-20]
+  prior_filter:
+    fc: 1000
+    A: -40
+  initial_conditions:
+    fc: [200,225, 250,275, 300, 325,  350]
+    A: [-15,-18, -20,-30, -35, -40, -55]
+    #fc: [300,310, 320,330, 340, 350,  360]
+    #fc: [400,410, 420,430, 440, 450,  460]
+    #A: [-30,-30, -30,-30, -30, -30, -30]
+  optimization: 
+    #backtracking_enabled: True
+    max_iter: 100
+    #alpha: 0.2
+    #beta: 0.5
+    tol: [5e-3, 5e-3]
+    mu: [1000, 10]
+    clamp_fc: True
+    clamp_A: True
+    only_negative_A: True
+       
+formal_test_small:
+    path: /scratch/work/molinee2/projects/ddpm/diffusion_autumn_2022/A-diffusion/small_blind_bwe_evaluation/original
+    path_out: /scratch/work/molinee2/projects/ddpm/diffusion_autumn_2022/A-diffusion/small_blind_bwe_evaluation/B04
+    N_examples: 32
+    
+
+formal_test:
+    path: /scratch/work/molinee2/projects/ddpm/diffusion_autumn_2022/A-diffusion/blind_bwe_evaluation/original
+    overlap: 0.25
+    use_AR: False
+    OLA: 256 #samples
+    blind: True
+    folder: /scratch/work/molinee2/projects/ddpm/diffusion_autumn_2022/A-diffusion/blind_bwe_evaluation/cqtdiff+_firwin_1000_blind
+
+complete_recording:
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/ETUDE_IN_GES-DUR_(Schwarze-Tasten-_-_Ignace_Jan_Paderewski_denoised.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/2nd_Movement-Adagio_cantabile_-_WILHELM_BACKHAUS_denoised.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/Etude_in_F_Minor_-_Sergei_Rachmaninoff_-_E._Donagnyi_denoised.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/Etude_in_G_Sharp_Minor_-_Ignace_Jan_Paderewski_denoised.wav
+  #path: /scratch/work/molinee3/datasets/denoised_recordings/piano/1._PRELUDE_IN_E_MINOR_(Opus_8,_No._4);_2._P_-_MARY_HALLOCK_denoised.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_1-prelude-in-e-minor-opus-8-no-4-2-prelude-in-c-minor-opus-28-no-4-3-p_gbia0276253a/1._PRELUDE_IN_E_MINOR_(Opus_8,_No._4);_2._P_-_MARY_HALLOCK_noisy_input.wav
+  path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_etude-in-f-minor_sergei-rachmaninoff-e-donagnyi_gbia0187069a/Etude_in_F_Minor_-_Sergei_Rachmaninoff_-_E._Donagnyi_denoised.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_etude-in-f-minor_sergei-rachmaninoff-e-donagnyi_gbia0187069a/Etude_in_F_Minor_-_Sergei_Rachmaninoff_-_E._Donagnyi_noisy_input.wav
+  ix_start: 70 #in seconds
+  std: 0.1 #normalizationout level 
+  overlap: 0.25 #in seconds
+  inpaint_DC: True #use data consistency for inpainting (not tested yet)
+  inpaint_RG: True #use restoration guidance for inpainting (no extra cost as RG is already used for BWE) 

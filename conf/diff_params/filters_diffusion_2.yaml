@@ -1,0 +1,23 @@
+#using this one for debugging
+diff_params:
+  callable: "diff_params.filters_diffusion.EDM"
+
+  sigma_data: 0.4 #default for maestro
+  sigma_min: 1e-2
+  sigma_max: 3
+  P_mean: -1.2 #what is this for?
+  P_std: 1.2 #ehat is this for?
+  ro: 7
+  ro_train: 7
+  Schurn: 5
+  Snoise: 1
+  Stmin: 0
+  Stmax: 50
+
+  range:
+    min: -50
+    max: 50
+
+#this is also data-loading specific... but let's keep it here for now
+
+

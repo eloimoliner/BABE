@@ -1,0 +1,139 @@
+do_test: True #boolean flag to run inference, False means no testing at all
+
+type: "blind"
+
+name: "tester_blind_bwe" #same as the file name, try to do that for all testers
+
+callable: 'testing.blind_bwe.blind_bwe_tester.BlindTester'
+sampler_callable: 'testing.blind_bwe.blind_bwe_sampler_langevin.BlindSampler'
+
+#modes: ['unconditional', 'bwe', 'inpainting'] #modes to test
+#modes: ['unconditional_operator','blind_bwe','unconditional', 'bwe'] #modes to test
+#modes: ['unconditional_operator','filter_bwe'] #modes to test
+#modes: ['unconditional','real_blind_bwe_complete','blind_bwe','real_blind_bwe','bwe'] #modes to test
+#modes: ['unconditional','bwe','blind_bwe','real_blind_bwe'] #modes to test
+modes: ['blind_bwe','real_blind_bwe'] #modes to test
+#modes: ['bwe','blind_bwe'] #modes to test
+#modes: ['unconditional_operator', 'filter_bwe'] #modes to test
+T: 50  #number of discretizatio steprs
+#T: 70 #number of discretizatio steprs
+order: 2 #order of the discretization TODO: implement higher order samplers as the one used in ediffi
+
+filter_out_cqt_DC_Nyq: True
+
+#checkpoint: "testing_training_code-400000.pt"
+checkpoint: "weights-489999.pt"
+
+#checkpoint_operator: "train_filters_diffusion_larger-250000.pt"
+
+unconditional:
+  num_samples: 8
+  audio_len: 184184
+
+posterior_sampling:
+  xi: 0.25 #restoration guidance, 0 means no guidance
+  clipping: False
+  clip_value: 0.5
+  data_consistency: False #always False for blind bwe
+  norm: 2  #"smoothl1" #1 or 2 or "smoothl1"
+  smoothl1_beta: 1
+  start_sigma: 0.4
+  freq_weighting: "None"
+
+#new diffusion parameters (only for sampling):
+diff_params:
+  same_as_training: False
+  sigma_data: 0.063 #default for maestro
+  sigma_min: 1e-4
+  sigma_max: 1
+  P_mean: -1.2 #what is this for?
+  P_std: 1.2 #ehat is this for?
+  ro: 7
+  ro_train: 13
+  Schurn: 10
+  Snoise: 1
+  Stmin: 0
+  Stmax: 50
+
+
+autoregressive:
+  overlap: 0.25
+  num_samples: 4
+
+sampler: "stochastic" #wether deterministic or stochastic, unused as Scurn defineds the stochasticity
+
+bandwidth_extension:
+  sigma_observations: 0.01 #adding noise is critical!
+  start_sigma: "None" #this is the initial noise level, applied to the observations as the first step of the inference, "None" means start from sigma_max
+
+  gain_boost: 5 #db boost to the gain of the audio signal
+
+  test_filter_fit: False #testing fitting for blind bwe experiments
+  compute_sweep: False #also logging stuff for blind bwe experiments
+  decimate:
+    factor: 1
+  filter:
+    type: "firwin" #or "cheby1_fir"
+    fc: 1000 #cutoff frequency of the applied lpf
+    order: 500
+    fir_order: 500
+    beta: 1
+    ripple: 0.05 #for the cheby1
+    resample:
+      fs: 2000
+    biquad:
+      Q: 0.707
+inpainting:
+  gap_length: 1000 #in ms
+  start_gap_idx: None #in ms, None means at the middle
+comp_sens: 
+  percentage: 5 #%
+phase_retrieval:
+  win_size: 1024
+  hop_size: 256
+max_thresh_grads: 1
+type_spec: "linear" #or "mel" for phase retrieval
+declipping:
+  SDR: 3 #in dB
+
+blind_bwe: #this involves generative model of filters
+  num_slopes: 1
+  gain_boost: 5 #db boost to the gain of the audio signal
+  real_recordings:
+    path: /scratch/work/molinee2/datasets/denoised_recordings/piano
+    num_samples: 4
+  sigma_observations: 0.00 #adding noise is critical!
+  compute_sweep: False #also logging stuff for blind bwe experiments
+
+  fcmin: 200
+  fcmax: "nyquist" #or a number
+  Amin: -80
+  Amax: -10
+  NFFT: 1024
+  sigma_den_estimate: 0.000 #this is the noise level of the observations, used for regularization
+  test_filter:
+    fc: 1000
+    A: -30
+  prior_filter:
+    fc: 900
+    A: -40
+  initial_conditions:
+    fc: [200, 210, 220]
+    A: [-40, -50, -60]
+  optimization: 
+    use_langevin: True
+    backtracking_enabled: True #unused
+    max_iter: 10 #we may not need so many iterations
+    alpha: 0.2 #unused
+    beta: 0.5 #unused
+    tol: [1e-3, 1e-3]
+    mu: [4000, 10] #first for the fc, second for A
+    #increasing the step size a little bit to 4000 seems to help a little bit
+
+complete_recording:
+  path: /scratch/work/molinee2/datasets/denoised_recordings/piano/ETUDE_IN_GES-DUR_(Schwarze-Tasten-_-_Ignace_Jan_Paderewski_denoised.wav
+  ix_start: 5 #in seconds
+  std: 0.1 #normalizationout level 
+  overlap: 0.25 #in seconds
+  inpaint_DC: True #use data consistency for inpainting (not tested yet)
+  inpaint_RG: True #use restoration guidance for inpainting (no extra cost as RG is already used for BWE) 

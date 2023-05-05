@@ -1,0 +1,34 @@
+callable: "diff_params.edm_tsm_reStretch.EDM"
+
+sigma_data: 0.1
+sigma_min: 1e-4
+sigma_max: 2
+P_mean: -1.2 #what is this for?
+P_std: 1.2 #ehat is this for?
+ro: 10
+ro_train: 10
+Schurn: 5
+Snoise: 1
+Stmin: 0
+Stmax: 50
+
+cfg_dropout_rate: 0.3
+cfg_unconditional_rate: 0.1
+
+noise_ST: "same_as_x" #or "None" or "same_as_x"
+
+spectrogram:
+  use_conditioning: False
+  n_fft: 1024
+  hop_length: 256
+
+
+aweighting:
+  use_aweighting: False
+  ntaps: 101
+
+restretching:
+  compress_factor: 0.5 #compress the input by this factor
+  stretch_factor: 2 #stretch the target by this factor
+  total_factor: 4 #stretch_factor*(1/compress_factor) = 4
+

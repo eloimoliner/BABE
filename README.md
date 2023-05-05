@@ -1,1 +1,1 @@
-# blind_bwe_diffusion
+# A-diffusion
