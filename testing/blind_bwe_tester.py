@@ -379,11 +379,12 @@ class BlindTester():
                 print("yes skippint", os.path.join(path_out, basename))
                 continue
             print("skippint?", os.path.join(path_out, basename+".wav"))
+
             if os.path.exists(os.path.join(path_out, basename+".wav")):
                 print("yes skippint", os.path.join(path_out, basename+".wav"))
                 continue
 
-            if not robustness:
+            if not(robustness):
                 if type=="fc_A":
                     degraded=self.apply_lowpass_fcA(D, da_filter)
                 else:
@@ -434,7 +435,10 @@ class BlindTester():
                 filter_data.append(((ix, ix+segL), estimated_filter))
 
             else:
-                pred=self.sampler.predict_bwe(seg, da_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False)
+                if robustness:
+                        pred=self.sampler.predict_bwe(seg, da_other_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
+                else:
+                        pred=self.sampler.predict_bwe(seg, da_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
     
             if self.args.tester.formal_test.use_AR:
                 assert not blind
@@ -473,8 +477,18 @@ class BlindTester():
                         outputs=self.sampler.predict_blind_bwe(seg, rid=False)
                         pred, estimated_filter =outputs
                         filter_data.append(((ix, ix+segL), estimated_filter))
+                    
                     else:
-                        pred=self.sampler.predict_bwe(seg, da_filter, typefilter,rid=False, test_filter_fit=False, compute_sweep=False)
+                        if robustness:
+                                pred=self.sampler.predict_bwe(seg, da_other_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
+                        else:
+                                pred=self.sampler.predict_bwe(seg, da_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
+                #if blind:
+                #        outputs=self.sampler.predict_blind_bwe(seg, rid=False)
+                #        pred, estimated_filter =outputs
+                #        filter_data.append(((ix, ix+segL), estimated_filter))
+                #    else:
+                #        pred=self.sampler.predict_bwe(seg, da_filter, typefilter,rid=False, test_filter_fit=False, compute_sweep=False)
 
     
                 previous_pred_win=pred[..., 0:segL-discard_end]
@@ -526,11 +540,22 @@ class BlindTester():
                 pred=self.sampler.predict_bwe_AR(seg_zp,y_masked, da_filter, typefilter,rid=False, test_filter_fit=False, compute_sweep=False, mask=mask)
             else:
                 if blind:
-                    outputs=self.sampler.predict_blind_bwe(seg_zp, rid=False)
-                    pred, estimated_filter =outputs
-                    filter_data.append(((ix, ix+segL), estimated_filter))
+                        outputs=self.sampler.predict_blind_bwe(seg_zp, rid=False)
+                        pred, estimated_filter =outputs
+                        filter_data.append(((ix, ix+segL), estimated_filter))
+                    
                 else:
-                    pred=self.sampler.predict_bwe(seg_zp, da_filter, typefilter,rid=False, test_filter_fit=False, compute_sweep=False)
+                        if robustness:
+                                pred=self.sampler.predict_bwe(seg_zp, da_other_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
+                        else:
+                                pred=self.sampler.predict_bwe(seg_zp, da_filter, type,rid=rid, test_filter_fit=False, compute_sweep=False) 
+
+                #if blind:
+                #    outputs=self.sampler.predict_blind_bwe(seg_zp, rid=False)
+                #    pred, estimated_filter =outputs
+                #    filter_data.append(((ix, ix+segL), estimated_filter))
+                #else:
+                #    pred=self.sampler.predict_bwe(seg_zp, da_filter, typefilter,rid=False, test_filter_fit=False, compute_sweep=False)
                 
             
             if not self.args.tester.formal_test.use_AR:

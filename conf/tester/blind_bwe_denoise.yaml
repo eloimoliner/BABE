@@ -181,8 +181,9 @@ complete_recording:
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/Etude_in_G_Sharp_Minor_-_Ignace_Jan_Paderewski_denoised.wav
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/Etude_in_G_Sharp_Minor_-_Ignace_Jan_Paderewski_denoised.wav
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_humoresque_felix-arndt-dvorak_gbia0013579a/Humoresque_-_Felix_Arndt_-_Dvorak_denoised.wav
+  path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_etude-in-g-sharp-minor_ignace-jan-paderewski-chopin_gbia0183841b/Etude_in_G_Sharp_Minor_-_Ignace_Jan_Paderewski_noisy_input.wav
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_impromptu-in-a-flat_harold-bauer-chopin_gbia0191066b/Impromptu_in_A_Flat_-_Harold_Bauer_-_Chopin_denoised.wav
-  path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_2nd-movement-adagio-cantabile_wilhelm-backhaus-beethoven_gbia7003781a/2nd_Movement-Adagio_cantabile_-_WILHELM_BACKHAUS_noisy_input.wav
+  #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_2nd-movement-adagio-cantabile_wilhelm-backhaus-beethoven_gbia7003781a/2nd_Movement-Adagio_cantabile_-_WILHELM_BACKHAUS_noisy_input.wav
 
   #path: /scratch/work/molinee3/datasets/denoised_recordings/piano/1._PRELUDE_IN_E_MINOR_(Opus_8,_No._4);_2._P_-_MARY_HALLOCK_denoised.wav
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_1-prelude-in-e-minor-opus-8-no-4-2-prelude-in-c-minor-opus-28-no-4-3-p_gbia0276253a/1._PRELUDE_IN_E_MINOR_(Opus_8,_No._4);_2._P_-_MARY_HALLOCK_noisy_input.wav

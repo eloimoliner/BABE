@@ -162,7 +162,7 @@ formal_test:
     blind: False
     robustness: True
     robustness_filter:
-        fc: 2800
+        fc: 10000
         order: 50
         beta: 1
     folder: /scratch/work/molinee2/projects/ddpm/blind_bwe_diffusion/blind_bwe_evaluation/cqtdiff+_3000_opt_nonblind_robustness

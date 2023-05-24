@@ -241,13 +241,14 @@ class BlindSampler():
                     x_hat=self.diff_params.denoiser(x, self.model, t_i.unsqueeze(-1))
                         
                     #x_hat=self.data_consistency_step(x_hat,y, degradation)
-                    try:
-                        x_hat=self.data_consistency_step(x_hat)
-                    except:
+                    if self.data_consistency:
                         try:
-                            x_hat=self.data_consistency_step(x_hat,y, degradation)
+                            x_hat=self.data_consistency_step(x_hat)
                         except:
-                            x_hat=self.data_consistency_step(x_hat,y, degradation, filter_params)
+                            try:
+                                x_hat=self.data_consistency_step(x_hat,y, degradation)
+                            except:
+                                x_hat=self.data_consistency_step(x_hat,y, degradation, filter_params)
 
         
                     score=(x_hat-x)/t_i**2

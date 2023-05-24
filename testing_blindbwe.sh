@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH  --time=1:59:59
+#SBATCH  --time=00:59:59
 #SBATCH --mem=30G
 #SBATCH --cpus-per-task=1
 #SBATCH --job-name=matrix_testing_bwe_blind_1000
@@ -21,13 +21,13 @@ n=$SLURM_ARRAY_TASK_ID
 
 #n=3 #original CQTDiff (with fast implementation) (22kHz)
 
-#n=54 #cqtdiff+ maestro 8s (alt version)
+n=54 #cqtdiff+ maestro 8s (alt version)
 #n=50 #cqtdiff+ attention maestro 8s (alt version)
 
 #n=51 #musicnet
 #n=64 #cocochorales str
 #n=65 #cocochorales strings
-n=93 #cocochorales brass
+#n=93 #cocochorales brass
 #n=94 #cocochorales woodwinf
 #n=88 #maestro 22k
 #n=87 #maestro 44k
@@ -38,9 +38,10 @@ then
     exp=maestro22k_8s
     network=paper_1912_unet_cqt_oct_noattention_adaln
     #tester=blind_bwe_sweep
-    #tester=blind_bwe_denoise
+    #tester=bwe_formal_noguidance_3000_opt_2
+    tester=blind_bwe_formal_small_3000
     #tester=blind_bwe_mushra
-    #tester=bwe_formal_3000_opt_4
+    #tester=bwe_formal_1000_opt_robustness_1
     #tester=edm_DC_correction_longer
     dset=maestro_allyears
     CQT=True
