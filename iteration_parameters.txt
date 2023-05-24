@@ -1,94 +1,93 @@
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff diff_params=edm tester=debug logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff diff_params=edm tester=edm_2ndorder_stochastic_cqt logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_original diff_params=edm tester=edm_DC_correction logging=base_logging tester.checkpoint="weights-489999.pt"
-dset=maestro exp=trying_adp_patching network=ADP_raw_patching diff_params=edm tester=edm_2ndorder_stochastic logging=base_logging
-dset=maestro exp=trying_adp_patching network=ADP_stft diff_params=edm tester=edm_2ndorder_stochastic logging=lowheavy_logging
-dset=maestro_overfit exp=test_cqtdiff_22k network=unet_cqtdiff diff_params=edm tester=edm_2ndorder_stochastic logging=debug_logging exp.lr_rampup_it=0
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff diff_params=edm tester=edm_DC_correction logging=base_logging
-dset=maestro exp=test_DD_matrix_22k network=dance_diffusion diff_params=edm tester=edm_2ndorder_stochastic logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_with_norm diff_params=edm tester=edm_DC_correction logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_revisited diff_params=edm tester=edm_DC_correction logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct diff_params=edm tester=edm_DC_correction logging=base_logging
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_revisited diff_params=edm tester=edm_DC_correction logging=base_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_kaiser diff_params=edm tester=edm_2ndorder_stochastic logging=base_loggin
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_kaiser diff_params=edm tester=edm_DC_correction_slow logging=base_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_kaiser diff_params=edm_aweighting tester=edm_DC_correction logging=base_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_nofenc_nonorm diff_params=edm_aweighting tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_yesfenc_yesnorm diff_params=edm_aweighting tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_nofenc_yesnorm diff_params=edm_aweighting tester=edm_DC_correction logging=base_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_deeper diff_params=edm_aweighting tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_nopyrdec diff_params=edm_aweighting tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_wnorm_freq diff_params=edm_aweighting tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_wnorm_freq_try2 diff_params=edm tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0512_nofenc_yesnorm diff_params=edm tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0712_wnorm_revised diff_params=edm tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqt_oct_0712_wnorm_revised_2 diff_params=edm tester=edm_DC_correction logging=frequent_logging 
-dset=maestro exp=test_cqtdiff_22k network=0812_unet_cqt_oct_revised_deeper diff_params=edm tester=edm_DC_correction logging=base_logging 
-dset=maestro exp=test_cqtdiff_22k network=0812_unet_cqt_oct_revised_deeper diff_params=edm tester=edm_DC_correction logging=base_logging exp.batch=2 exp.resume=False
-dset=maestro exp=test_cqtdiff_22k network=0912_unet_cqt_oct_transformer diff_params=edm tester=edm_DC_correction logging=huge_model_logging  
-dset=maestro exp=test_cqtdiff_44k network=0912_unet_cqt_oct_transformer_44k diff_params=edm tester=edm_DC_correction logging=huge_model_logging  
-dset=maestro exp=test_cqtdiff_22k network=1112_unet_cqt_oct_transformer_layerscale diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=maestro exp=test_cqtdiff_22k network=1112_unet_cqt_oct_transformer_zeroinit diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=maestro exp=test_cqtdiff_22k network=1112_unet_cqt_oct_transformer_good_init diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=lowpass_filters exp=train_filters_diffusion network=1212_CNN_filters diff_params=filters_diffusion tester=tester_filter_generation logging=filter_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_original network_operator=1212_CNN_filters diff_params=edm tester=blind_bwe logging=blind_bwe_logging dset.test.num_samples=2
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_deeper_goodinit diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_with_resdec diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=lowpass_filters exp=train_filters_diffusion network=1212_CNN_filters_larger diff_params=filters_diffusion tester=tester_filter_generation logging=filter_logging 
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_with_attention diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=maestro exp=test_cqtdiff_22k network=unet_cqtdiff_original network_operator=1212_CNN_filters_larger diff_params=edm tester=blind_bwe logging=blind_bwe_logging dset.test.num_samples=4
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_with_projattention diff_params=edm tester=edm_DC_correction logging=huge_model_logging exp.batch=4
-dset=lowpass_filters exp=train_filters_diffusion network=1212_CNN_filters_larger diff_params=filters_diffusion tester=tester_filter_generation logging=filter_logging dset.dist.decay_stages=1
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_with_attention_relpos diff_params=edm tester=edm_DC_correction logging=huge_model_logging 
-dset=maestro exp=test_cqtdiff_22k network=1412_unet_cqt_oct_with_projattention diff_params=edm_transients tester=edm_DC_correction logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging 
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_attention diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging 
-dset=maestro_allyears exp=dancediffusion_maestro22k_8s network=paper_1912_dancediffusion_mono diff_params=edm tester=edm_2ndorder_stochastic logging=huge_model_logging exp.batch=4
-dset=musicnet exp=musicnet44k_8s network=paper_1912_unet_cqt_oct_attention_44k diff_params=edm tester=edm_DC_correction_44k logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=maestro44k_8s network=paper_1912_unet_cqt_oct_attention_44k diff_params=edm tester=edm_DC_correction_44k logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=dancediffusion_maestro_original network=paper_1912_dancediffusion_mono diff_params=edm_vdiff tester=testing_dancediffusion logging=huge_model_logging 
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_attention_adaLN_2 diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=musicnet exp=musicnet44k_4s network=paper_1912_unet_cqt_oct_attention_44k_2 diff_params=edm tester=edm_DC_correction_44k logging=huge_model_logging exp.batch=4
-dset=musdb exp=musicnet44k_4s network=paper_1912_unet_cqt_oct_attention_44k_bass diff_params=edm tester=edm_DC_correction_44k logging=huge_model_logging exp.batch=4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_hann diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=librispeech exp=librispeech16k_8s network=paper_1912_unet_cqt_oct_attention_adaLN_2 diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=maestro22k_131072 network=ADP_raw_patching diff_params=edm tester=edm_2ndorder_stochastic logging=huge_model_logging exp.batch=16
-dset=maestro_allyears exp=maestro22k_131072 network=crash_unet diff_params=edm tester=edm_2ndorder_stochastic logging=huge_model_logging 
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm tester=inpainting_tester logging=huge_model_logging
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_nodc diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=toytrajectories_dset exp=toytrajectories network=trajectories_unet1d diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=vctk_test exp=diffwave-sr_48k network=diffwave-sr_48k diff_params=edm_eps tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=6
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=vctk exp=vctk_16k network=diffwave-sr_16k diff_params=edm tester=edm_2ndorder_stochastic logging=huge_model_logging exp.batch=4 diff_params.sigma_data=0.04
-dset=CocoChorales exp=CocoChorales_16k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm_chorales tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
+
+
+
+
+
+
+
+
+
+
 dset=CocoChorales_stems exp=CocoChorales_16k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm_chorales tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4 tester.diff_params.sigma_data=0.15
-dset=maestro_allyears exp=maestro22k_pqmf network=unet_pqmf diff_params=edm tester=edm_2ndorder_stochastic tester.unconditional.audio_len=131073 logging=huge_model_logging exp.batch=4
-dset=tapehiss exp=tapehiss network=unet_pqmf_tapehiss diff_params=edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_smaller diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_more_smaller diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_deeper diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_deeper_2 diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=CD_realtrajectories network=trajectories_unet1d_deeper_2 diff_params=CD_edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=32
-dset=realtrajectories_dset exp=CD_realtrajectories network=trajectories_unet1d_deeper_2 diff_params=CD_edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=32
-dset=maestro_allyears exp=maestro44k_8s network=unet_cqt_oct_maestro_44k diff_params=edm_44k tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_2 diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_3 diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_4 diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=CD_realtrajectories network=trajectories_unet1d_4 diff_params=CD_edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=32
-dset=realtrajectories_dset exp=PD_realtrajectories network=trajectories_unet1d_4 diff_params=PD_edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=realtrajectories_dset exp=realtrajectories_inpaint network=trajectories_unet1d_4_inpaint diff_params=edm_trajectories_inpaint tester=trajectories_tester_inpaint logging=debug_logging exp.batch=8
-dset=tapehiss exp=tapehiss network=unet_1d_tapehiss diff_params=edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=tapehiss exp=tapehiss network=unet_1d_tapehiss_2 diff_params=edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=tapehiss exp=tapehiss network=unet_1d_tapehiss_3 diff_params=edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=tapehiss exp=tapehiss network=unet_1d_tapehiss_4 diff_params=edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=8
-dset=tapehiss exp=CD_tapehiss network=unet_1d_tapehiss_3 diff_params=CD_edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=64
-dset=tapehiss exp=PD_tapehiss network=unet_1d_tapehiss_3 diff_params=PD_edm_tapehiss tester=trajectories_tester logging=debug_logging exp.batch=64
-dset=maestro_allyears exp=maestro44k_8s network=unet_cqt_oct_maestro_44k diff_params=edm_44k tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=maestro_2018 exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
-dset=toytrajectories_dset exp=toytrajectories network=trajectories_unet1d_4 diff_params=edm_toytrajectories tester=trajectories_tester logging=debug_logging exp.batch=16
-dset=realtrajectories_dset exp=realtrajectories network=trajectories_unet1d_4 diff_params=edm_trajectories tester=trajectories_tester logging=debug_logging exp.batch=16
-dset=maestro_recent exp=maestro44k_8s network=unet_cqt_oct_maestro_44k diff_params=edm_44k tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 dset=CocoChorales_stems_brass exp=CocoChorales_16k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm_chorales tester=only_uncond logging=huge_model_logging exp.batch=4 tester.diff_params.sigma_data=0.15
 dset=CocoChorales_stems_woodwind exp=CocoChorales_16k_8s network=paper_1912_unet_cqt_oct_noattention_adaln diff_params=edm_chorales tester=only_uncond logging=huge_model_logging exp.batch=4 tester.diff_params.sigma_data=0.15
