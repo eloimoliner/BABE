@@ -194,7 +194,7 @@ complete_recording:
   #path: /scratch/work/molinee2/datasets/denoised_recordings/piano/78_etude-in-f-minor_sergei-rachmaninoff-e-donagnyi_gbia0187069a/Etude_in_F_Minor_-_Sergei_Rachmaninoff_-_E._Donagnyi_noisy_input.wav
   use_denoiser: True
   SNR_extra_noise: "None"
-  n_segments_blindstep: 2
+  n_segments_blindstep: 1
   ix_start: 15 #in seconds
   std: 0.13 #normalizationout level 
   overlap: 0.25 #in seconds
