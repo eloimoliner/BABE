@@ -19,8 +19,8 @@ export TORCH_USE_RTLD_GLOBAL=YES
 #n=$SLURM_ARRAY_TASK_ID
 
 #n=54 #cqtdiff+ maestro 8s (alt version)
-#n=65 #cocochorales strings
-n=93 #cocochorales brass
+n=65 #cocochorales strings
+#n=93 #cocochorales brass
 #n=94 #cocochorales woodwinf
 
 namerun=training
@@ -48,7 +48,7 @@ then
     exp=CocoChorales_16k_8s
     network=cqtdiff+
     tester=basic_tester       
-    dset=CocoChorales_stems
+    dset=CocoChorales_stems_strings
     CQT=True
     diff_params=edm_chorales
     logging=basic_logging
@@ -58,7 +58,7 @@ then
     exp=CocoChorales_16k_8s
     network=cqtdiff+
     tester=basic_tester       
-    dset=CocoChorales_stems
+    dset=CocoChorales_stems_woodwind
     CQT=True
     diff_params=edm_chorales
     logging=basic_logging
@@ -68,7 +68,7 @@ then
     exp=CocoChorales_16k_8s
     network=cqtdiff+
     tester=basic_tester       
-    dset=CocoChorales_stems
+    dset=CocoChorales_stems_brass
     CQT=True
     diff_params=edm_chorales
     logging=basic_logging
