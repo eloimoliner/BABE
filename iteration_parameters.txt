@@ -51,7 +51,7 @@
 
 
 
-dset=maestro_allyears exp=maestro22k_8s network=paper_1912_unet_cqt_oct_noattention_hann diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
+dset=maestro_allyears exp=maestro22k_8s network=cqtdiff+ diff_params=edm tester=edm_DC_correction_longer logging=huge_model_logging exp.batch=4
 
 
 

@@ -10,14 +10,9 @@
 import os
 import time
 import copy
-#import json
-#import pickle
-#import psutil
 import numpy as np
 import torch
 import torchaudio
-#import utils.dnnlib
-#from utils.torch_utils import distributed as dist
 from utils.torch_utils import training_stats
 from utils.torch_utils import misc
 
@@ -36,6 +31,7 @@ import utils.training_utils as t_utils
 
 from surgeon_pytorch import Inspect, get_layers
 #----------------------------------------------------------------------------
+
 class Trainer():
     def __init__(self, args, dset, network, optimizer, diff_params, tester=None, device='cpu'):
         self.args=args

@@ -1,50 +1,17 @@
-# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-#
-# This work is licensed under a Creative Commons
-# Attribution-NonCommercial-ShareAlike 4.0 International License.
-# You should have received a copy of the license along with this
-# work. If not, see http://creativecommons.org/licenses/by-nc-sa/4.0/
-
-"""Train diffusion-based generative model using the techniques described in the
-paper "Elucidating the Design Space of Diffusion-Based Generative Models"."""
-
 import os
 import re
 import json
 import hydra
 #import click
 import torch
-import utils.dnnlib as dnnlib
-from utils.torch_utils import distributed as dist
+#from utils.torch_utils import distributed as dist
 import utils.setup as setup
-
-import warnings
-warnings.filterwarnings('ignore', 'Grad strides do not match bucket view strides') # False warning printed by PyTorch 1.12.
-
-#import wandb
-
-#----------------------------------------------------------------------------
-# Parse a comma separated list of numbers or ranges and return a list of ints.
-# Example: '1,2,5-10' returns [1, 2, 5, 6, 7, 8, 9, 10]
-
-def parse_int_list(s):
-    if isinstance(s, list): return s
-    ranges = []
-    range_re = re.compile(r'^(\d+)-(\d+)$')
-    for p in s.split(','):
-        m = range_re.match(p)
-        if m:
-            ranges.extend(range(int(m.group(1)), int(m.group(2))+1))
-        else:
-            ranges.append(int(p))
-    return ranges
-
-#----------------------------------------------------------------------------
 
 
 def _main(args):
     """Train diffusion-based generative model using the techniques described in the
     paper "Elucidating the Design Space of Diffusion-Based Generative Models".
+
 
     Examples:
 
@@ -62,8 +29,7 @@ def _main(args):
     __file__ = hydra.utils.to_absolute_path(__file__)
     dirname = os.path.dirname(__file__)
     args.model_dir = os.path.join(dirname, str(args.model_dir))
-    if dist.get_rank() == 0:
-        if not os.path.exists(args.model_dir):
+    if not os.path.exists(args.model_dir):
             raise Exception(f"Model directory {args.model_dir} does not exist")
             #os.makedirs(args.model_dir)
 
@@ -87,37 +53,31 @@ def _main(args):
 
     tester=setup.setup_tester(args, network=network, diff_params=diff_params, test_set=test_set, device=device) #this will be used for making demos during training
     # Print options.
-    dist.print0()
-    dist.print0('Training options:')
-    dist.print0()
-    dist.print0(f'Output directory:        {args.model_dir}')
-    dist.print0(f'Network architecture:    {args.network.callable}')
-    dist.print0(f'Diffusion parameterization:  {args.diff_params.callable}')
-    dist.print0(f'Tester:                  {args.tester.callable}')
-    dist.print0(f'Experiment:                  {args.exp.exp_name}')
-    dist.print0()
+    print()
+    print('Training options:')
+    print()
+    print(f'Output directory:        {args.model_dir}')
+    print(f'Network architecture:    {args.network.callable}')
+    print(f'Diffusion parameterization:  {args.diff_params.callable}')
+    print(f'Tester:                  {args.tester.callable}')
+    print(f'Experiment:                  {args.exp.exp_name}')
+    print()
 
     # Train.
     print("loading checkpoint path:", args.tester.checkpoint)
     if args.tester.checkpoint != 'None':
-
-        tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint))
+        try:
+            #absolute path
+            tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint)) 
+        except:
+            #relative path
+            ckpt_path=os.path.join(dirname, args.tester.checkpoint)
+            tester.load_checkpoint(ckpt_path) 
     else:
         print("trying to load latest checkpoint")
         tester.load_latest_checkpoint()
-    try:
-        if args.exp.CLAP.use_CLAP:
-            tester.setup_CLAP_model()
-        else:
-            print("CLAP not used because of config")
-    except Exception as e:
-        print("CLAP not used because of error")
-        print(e)
-
-
 
     tester.dodajob()
-
 
 @hydra.main(config_path="conf", config_name="conf")
 def main(args):

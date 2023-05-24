@@ -1,7 +1,8 @@
 #network from the paper: Solving audio inverse problems with a diffusion model
-name: "unet_cqt_oct_with_attention"
+name: "cqtdiff+"
 #callable: "networks.unet_cqt_oct_with_projattention.Unet_CQT_oct_with_attention"
-callable: "networks.unet_cqt_oct_with_projattention_adaLN_2.Unet_CQT_oct_with_attention"
+#callable: "networks.unet_cqt_oct_with_projattention_adaLN_2.Unet_CQT_oct_with_attention"
+callable: "networks.cqtdiff+.Unet_CQT_oct_with_attention"
 
 
 use_fencoding: False

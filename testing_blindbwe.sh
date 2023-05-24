@@ -31,7 +31,8 @@ then
     network=cqtdiff+
     #tester=blind_bwe_sweep
     #tester=bwe_formal_noguidance_3000_opt_2
-    tester=blind_bwe_formal_small_3000
+    #tester=blind_bwe_formal_small_3000
+    tester=blind_bwe_denoise       
     #tester=blind_bwe_mushra
     #tester=bwe_formal_1000_opt_robustness_1
     #tester=edm_DC_correction_longer

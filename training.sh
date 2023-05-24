@@ -16,9 +16,9 @@ module load gcc/8.4.0
 export TORCH_USE_RTLD_GLOBAL=YES
 #export HYDRA_FULL_ERROR=1
 #export CUDA_LAUNCH_BLOCKING=1
-n=$SLURM_ARRAY_TASK_ID
+#n=$SLURM_ARRAY_TASK_ID
 
-#n=94
+n=54
 
 namerun=training_filter_score_model
 name="${n}_$namerun"
