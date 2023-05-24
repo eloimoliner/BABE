@@ -6,20 +6,10 @@ import hydra
 import torch
 #from utils.torch_utils import distributed as dist
 import utils.setup as setup
+import urllib.request
 
 
 def _main(args):
-    """Train diffusion-based generative model using the techniques described in the
-    paper "Elucidating the Design Space of Diffusion-Based Generative Models".
-
-
-    Examples:
-
-    \b
-    # Train DDPM++ model for class-conditional CIFAR-10 using 8 GPUs
-    torchrun --standalone --nproc_per_node=8 train.py --outdir=training-runs \\
-        --data=datasets/cifar10-32x32.zip --cond=1 --arch=ddpmpp
-    """
 
     device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
     #assert torch.cuda.is_available()
@@ -31,25 +21,15 @@ def _main(args):
     args.model_dir = os.path.join(dirname, str(args.model_dir))
     if not os.path.exists(args.model_dir):
             raise Exception(f"Model directory {args.model_dir} does not exist")
-            #os.makedirs(args.model_dir)
 
     args.exp.model_dir=args.model_dir
 
-
-    #opts = dnnlib.EasyDict(kwargs)
     torch.multiprocessing.set_start_method('spawn')
 
-    #dist.init()
-    #dset=setup.setup_dataset(args)
     diff_params=setup.setup_diff_parameters(args)
     network=setup.setup_network(args, device)
-    #tester=setup.setup_tester(args, network, diff_params, device) #this will be used for making demos during training
 
-    #try:
     test_set=setup.setup_dataset_test(args)
-    #except:
-    #    dist.print0("no test set, but let's continue")
-    #    test_set=None
 
     tester=setup.setup_tester(args, network=network, diff_params=diff_params, test_set=test_set, device=device) #this will be used for making demos during training
     # Print options.
@@ -66,13 +46,19 @@ def _main(args):
     # Train.
     print("loading checkpoint path:", args.tester.checkpoint)
     if args.tester.checkpoint != 'None':
+        ckpt_path=os.path.exists(os.path.join(dirname, args.tester.checkpoint)
+        if not os.path.exists(ckpt_path):
+            urllib.request.urlretrieve("http://google.com/index.html", filename="local/index.html")
+            HF_path="https://huggingface.co/Eloimoliner/babe/resolve/main/"+os.path.basename(args.tester.checkpoint)
+            urllib.request.urlretrieve(HF_path, filename=ckpt_path)
+           
         try:
-            #absolute path
-            tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint)) 
-        except:
             #relative path
             ckpt_path=os.path.join(dirname, args.tester.checkpoint)
             tester.load_checkpoint(ckpt_path) 
+        except:
+            #absolute path
+            tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint)) 
     else:
         print("trying to load latest checkpoint")
         tester.load_latest_checkpoint()
