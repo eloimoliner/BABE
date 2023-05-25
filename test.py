@@ -20,7 +20,7 @@ def _main(args):
     dirname = os.path.dirname(__file__)
     args.model_dir = os.path.join(dirname, str(args.model_dir))
     if not os.path.exists(args.model_dir):
-            raise Exception(f"Model directory {args.model_dir} does not exist")
+            os.makedirs(args.model_dir)
 
     args.exp.model_dir=args.model_dir
 
@@ -46,19 +46,20 @@ def _main(args):
     # Train.
     print("loading checkpoint path:", args.tester.checkpoint)
     if args.tester.checkpoint != 'None':
-        ckpt_path=os.path.exists(os.path.join(dirname, args.tester.checkpoint)
-        if not os.path.exists(ckpt_path):
-            urllib.request.urlretrieve("http://google.com/index.html", filename="local/index.html")
+        ckpt_path=os.path.join(dirname, args.tester.checkpoint)
+        if not(os.path.exists(ckpt_path)):
+            print("download ckpt")
+            path, basename= os.path.split(args.tester.checkpoint)
+            if not(os.path.exists(os.path.join(dirname, path))):
+                    os.makedirs(os.path.join(dirname,path))
             HF_path="https://huggingface.co/Eloimoliner/babe/resolve/main/"+os.path.basename(args.tester.checkpoint)
             urllib.request.urlretrieve(HF_path, filename=ckpt_path)
-           
-        try:
-            #relative path
-            ckpt_path=os.path.join(dirname, args.tester.checkpoint)
-            tester.load_checkpoint(ckpt_path) 
-        except:
-            #absolute path
-            tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint)) 
+        #relative path
+        ckpt_path=os.path.join(dirname, args.tester.checkpoint)
+        tester.load_checkpoint(ckpt_path) 
+        #jexcept:
+        #j    #absolute path
+        #j   tester.load_checkpoint(os.path.join(args.model_dir,args.tester.checkpoint)) 
     else:
         print("trying to load latest checkpoint")
         tester.load_latest_checkpoint()

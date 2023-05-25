@@ -18,7 +18,7 @@ export CUDA_LAUNCH_BLOCKING=1
 n=$SLURM_ARRAY_TASK_ID
 
 
-#n=54 #cqtdiff+ maestro 8s (alt version)
+#n=54 #cqtdiff+ maestro 8s 
 #n=65 #cocochorales strings
 n=93 #cocochorales brass
 #n=94 #cocochorales woodwinf
@@ -50,7 +50,7 @@ then
     diff_params=edm_chorales
 elif [[ $n -eq 93 ]] 
 then
-    ckpt="./experiments/COCOChorales_woodwind/COCOChorales_woodwind_22k_8s-480000.pt"
+    ckpt="./experiments/COCOChorales_brass/COCOChorales_brass_16k_11s-480000.pt"
     exp=CocoChorales_16k_8s
     network=cqtdiff+
     tester=blind_bwe_denoise_brass
@@ -59,7 +59,7 @@ then
     diff_params=edm_chorales
 elif [[ $n -eq 94 ]] 
 then
-    ckpt="./experiments/COCOChorales_brass/COCOChorales_brass_22k_8s-390000.pt"
+    ckpt="./experiments/COCOChorales_woodwind/COCOChorales_woodwind_16k_11s-390000.pt"
     exp=CocoChorales_16k_8s
     network=cqtdiff+
     tester=blind_bwe_denoise_woodwind

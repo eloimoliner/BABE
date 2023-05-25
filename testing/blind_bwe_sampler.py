@@ -28,13 +28,8 @@ class BlindSampler():
         self.data_consistency=self.args.tester.posterior_sampling.data_consistency #use reconstruction gudance without replacement
         self.nb_steps=self.args.tester.T
 
-        #self.treshold_on_grads=args.tester.inference.max_thresh_grads
-        #self.rid=rid #this is for logging, ignore for now
-
         #prepare optimization parameters
         self.mu=torch.Tensor([self.args.tester.blind_bwe.optimization.mu[0], self.args.tester.blind_bwe.optimization.mu[1]])
-        #self.bt_alpha=self.args.tester.blind_bwe.optimization.alpha
-        #self.bt_beta=self.args.tester.blind_bwe.optimization.beta
         #clamping parameters
         self.fcmin=self.args.tester.blind_bwe.fcmin
         if self.args.tester.blind_bwe.fcmax =="nyquist":
@@ -46,15 +41,10 @@ class BlindSampler():
         #used for congerence checking
         self.tol=self.args.tester.blind_bwe.optimization.tol
         
-
         self.start_sigma=self.args.tester.posterior_sampling.start_sigma
         if self.start_sigma =="None":
             self.start_sigma=None
         print("start sigma", self.start_sigma)
-
-
-        
-
 
 
     def update_diff_params(self):
@@ -148,48 +138,11 @@ class BlindSampler():
 
         x.requires_grad_()
         x_hat=self.get_denoised_estimate(x, t_i)
-        #x_hat=self.diff_params.denoiser(x, self.model, t_i.unsqueeze(-1))
-
-        #if self.args.tester.filter_out_cqt_DC_Nyq:
-        #    x_hat=self.model.CQTransform.apply_hpf_DC(x_hat)
-
         #add noise to y
 
         rec_grads=self.get_rec_grads(x_hat, y, x, t_i, degradation, filter_params)
 
-        #if filter_params is not None:
-        #    den_rec= degradation(x_hat, filter_params) 
-        #else:
-        #    den_rec= degradation(x_hat) 
-
-        #if len(y.shape)==3:
-        #    dim=(1,2)
-        #elif len(y.shape)==2:
-        #    dim=1
-
-        #if self.args.tester.posterior_sampling.norm=="smoothl1":
-        #    norm=torch.nn.functional.smooth_l1_loss(y, den_rec, reduction='sum', beta=self.args.tester.posterior_sampling.smoothl1_beta)
-        #else:
-        #    norm=torch.linalg.norm(y-den_rec,dim=dim, ord=self.args.tester.posterior_sampling.norm)
-
-        
-        #rec_grads=torch.autograd.grad(outputs=norm,
-        #                              inputs=x)
-
-        #rec_grads=rec_grads[0]
-        
-        #normguide=torch.linalg.norm(rec_grads)/self.args.exp.audio_len**0.5
-        
-        #normalize scaling
-        #s=self.xi/(normguide*t_i+1e-6)
-        
-        #optionally apply a treshold to the gradients
-        #if False:
-        #    #pply tresholding to the gradients. It is a dirty trick but helps avoiding bad artifacts 
-        #    rec_grads=torch.clip(rec_grads, min=-self.treshold_on_grads, max=self.treshold_on_grads)
-        
         score=self.denoised2score(x_hat, x, t_i)
-        #score=(x_hat.detach()-x)/t_i**2
 
         #apply scaled guidance to the score
         score=score-rec_grads
@@ -276,10 +229,6 @@ class BlindSampler():
         N=100
         return torchaudio.functional.resample(x,orig_freq=int(N*self.factor), new_freq=N)
 
-    #def apply_3rdoct_filt(self,x, filt, freq_octs):
-    #    filt=f_utils.unnormalize_filter(filt)
-    #    y=f_utils.apply_filter(x, filt, self.args.tester.blind_bwe.NFFT,self.args.exp.sample_rate, freq_octs.to(x.device),interpolation="hermite_cubic") 
-    #    return y[0]
     def prepare_smooth_mask(self, mask, size=10):
         hann=torch.hann_window(size*2)
         hann_left=hann[0:size]
@@ -618,12 +567,6 @@ class BlindSampler():
             #update params with gradient descent, using backtracking line search
             t=self.mu
             newparams=filter_params-t.unsqueeze(1)*grad[0]
-            #newnorm=func(newparams)
-            #backtracking line search loop (is this necessary??)
-            #while newnorm>norm-t*self.bt_alpha*grad[0].T@grad[0]:
-            #    t=t*self.bt_beta
-            #    newparams=filter_params-t*grad[0]
-            #    newnorm=func(newparams)
 
             #update with the found step size
             filter_params=newparams
@@ -640,10 +583,6 @@ class BlindSampler():
                         filter_params[1,k]=torch.clamp(filter_params[1,k],min=self.Amin,max=filter_params[1,k-1] if self.args.tester.blind_bwe.optimization.only_negative_A else self.Amax)
     
 
-            #checck if params are converging
-            #if i>0:
-            #   if (torch.abs(filter_params[0]-prev_params[0])<self.tol[0]) and (torch.abs(filter_params[1]-prev_params[1])<self.tol[1]):
-            #     break
             if i>0:
                 if (torch.abs(filter_params[0]-prev_params[0]).mean()<self.tol[0]) and (torch.abs(filter_params[1]-prev_params[1]).mean()<self.tol[1]):
                      break
